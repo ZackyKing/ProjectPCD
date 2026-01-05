@@ -683,7 +683,11 @@
                     formData.append('method', selectedMethod.value);
 
                     try {
-                        const response = await axios.post('http://127.0.0.1:8000/process', formData, {
+                        // Auto-detect: gunakan localhost untuk development, /api/process untuk production
+                        const apiUrl = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1'
+                            ? 'http://127.0.0.1:8000/process'
+                            : '/api/process';
+                        const response = await axios.post(apiUrl, formData, {
                             headers: { 'Content-Type': 'multipart/form-data' }
                         });
                         processedImage.value = response.data.image_base64;
